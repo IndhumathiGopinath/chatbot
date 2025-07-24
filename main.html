@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Indhu's AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #ada6b4 0%, #a37acc 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-weight: 600;
+            font-size: 3.5em;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 15px auto 30px;
+        }
+
+        #userInput {
+            max-width: 600px;
+            margin: 0 auto;
+            height: 50px;
+            border-radius: 25px;
+            border: none;
+            padding-left: 25px;
+        }
+
+        .btn-ask {
+            border-radius: 25px;
+            padding: 10px 30px;
+            font-weight: 600;
+            background-color: #f7c59f;
+            border-color: #f7c59f;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ask:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #f8b48a;
+            border-color: #f8b48a;
+        }
+
+        #response-container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        
+        #response {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            min-height: 100px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #6c757d;
+        }
+
+        #response:not(:empty) {
+            color: #343a40;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #764ba2;
+            animation: spin 1s ease infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Indhu's AI</h1>
+            <p>Your intelligent assistant for instant answers. Ask me anything!</p>
+            <div class="form-group">
+                <input type="text" class="form-control" id="userInput" placeholder="e.g., Explain quantum computing in simple terms" />
+            </div>
+            <button class="btn btn-ask" onclick="sendMessage()">Ask!</button>
+        </div>
+    </div>
+
+    <div class="container" id="response-container">
+        <div id="response">
+           Your results will appear here...
+        </div>
+    </div>
+    
+    <script>
+        // --- IMPORTANT SECURITY NOTE ---
+        // Your API key is visible in this client-side code.
+        // This is a major security risk. Anyone visiting the page can see and use your key.
+        // For a real application, this API call should be made from a backend server 
+        // where the key can be stored securely.
+        
+        async function sendMessage() {
+            const input = document.getElementById('userInput').value;
+            const responseDiv = document.getElementById('response');
+            
+            if (!input) {
+                responseDiv.innerHTML = 'Please enter a question.';
+                return;
+            }
+
+            // Show loading spinner
+            responseDiv.innerHTML = '<div class="spinner"></div><div>Loading...</div>';
+            
+            try {
+                const response = await fetch(
+                    'https://openrouter.ai/api/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer <ur key> ',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: '<ur model>', // Using a standard free model
+                            messages: [{ role: 'user', content: input }],
+                        }),
+                    },
+                );
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data);
+                
+                const markdownText = data.choices?.[0]?.message?.content || 'No response received from the AI.';
+                responseDiv.innerHTML = marked.parse(markdownText);
+
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
