@@ -3,7 +3,7 @@ async function sendMessage() {
     const responseDiv = document.getElementById('response');
     
     // --- IMPORTANT: ADD YOUR GEMINI API KEY HERE ---
-    const YOUR_API_KEY = "AIzaSyDGfSi1HfAx3OwAqpAs9z-mLgw5SIJSwWw";
+    const YOUR_API_KEY = "ur key";
 
     if (!input) {
         responseDiv.innerHTML = 'Please enter a question.';
@@ -44,4 +44,5 @@ async function sendMessage() {
         console.error('Error:', error);
         responseDiv.innerHTML = `<strong style="color: red;">Error:</strong> ${error.message}`;
     }
+
 }
