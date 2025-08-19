@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Indhu's AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Indhu's AI</h1>
+            <p>Your intelligent assistant for instant answers. Ask me anything!</p>
+            <div class="form-group">
+                <input type="text" class="form-control" id="userInput" placeholder="e.g., Explain quantum computing in simple terms" />
+            </div>
+            <button class="btn btn-ask" onclick="sendMessage()">Ask!</button>
+        </div>
+    </div>
+
+    <div class="container" id="response-container">
+        <div id="response">
+            Your results will appear here...
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
